@@ -1,30 +1,26 @@
-import random
+import numpy as np
 
 class Neuron:
-    def __init__(self, num_inputs):
-        self.weights = [random.uniform(-1, 1) for _ in range(num_inputs)]
-        self.bias = random.uniform(-1, 1)
 
-    def activate(self, x):
+    def __init__(self, w: np.ndarray[float], b: float):
+        if w.size>0:
+            self.weight = w
+        if b:
+            self.bias = b
+
+    def _threshold_function(self, x: np.ndarray[float]) -> int:
         return 1 if x >= 0 else 0
 
-    def predict(self, inputs):
-        weighted_sum = sum(inputs[i] * self.weights[i] for i in range(len(inputs))) + self.bias
-        return self.activate(weighted_sum)
+    def predict(self, x: np.ndarray[int]) -> int:
+        u = 0
+        u = sum(x[i] * self.weight[i] for i in range(len(x)))
+        return self._threshold_function(u + self.bias)
 
-if __name__ == '__main__':
-    req = [1, 1, 0, 1]
-    neuroReq = []
-    while req!=neuroReq:
-        neuroReq.clear()
-        neuron = Neuron(2)
-        test = [[0, 0], [0, 1], [1, 0], [1, 1]]
 
-        print("Веса:", neuron.weights)
-        print("Смещение:", neuron.bias)
-        print("\nРезультаты:")
-        for inputs in test:
-            predict = neuron.predict(inputs)
-            neuroReq.append(predict)
-            print(f"Входы: {inputs}, Выход: {predict}")
-            
+if __name__ == "__main__":
+    neuro = Neuron(w=np.array([-0.165, 0.766]), b=0.062)
+    print(neuro.predict(x=np.array([0, 0])))
+    print(neuro.predict(x=np.array([0, 1])))
+    print(neuro.predict(x=np.array([1, 0])))
+    print(neuro.predict(x=np.array([1, 1])))
+    
